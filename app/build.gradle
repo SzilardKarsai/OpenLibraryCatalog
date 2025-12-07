@@ -2,6 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
+configurations.all {
+    exclude group: 'org.jetbrains', module: 'annotations'
+}
+
 android {
     namespace 'hu.nje.openlibrarycatalog'
     compileSdk 36
@@ -44,6 +48,7 @@ dependencies {
     implementation 'androidx.room:room-compiler:2.8.4'
     implementation 'androidx.navigation:navigation-fragment:2.9.6'
     implementation 'androidx.navigation:navigation-ui:2.9.6'
+    implementation "org.jetbrains:annotations:23.0.0"
 
 
     implementation libs.appcompat

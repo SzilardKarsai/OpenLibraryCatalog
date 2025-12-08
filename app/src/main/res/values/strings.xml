@@ -2,4 +2,9 @@
     <string name="app_name">OpenLibraryCatalog</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open_library">Open Library</string>
+    <string name="empty"> </string>
+    <string name="placeholder_title">Könyv címe</string>
+    <string name="placeholder_author">Szerző</string>
+    <string name="placeholder_year">1997</string>
 </resources>

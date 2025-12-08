@@ -12,12 +12,14 @@
         android:id="@+id/topAppBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:title="Open Library katalógus"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:titleCentered="true"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="#23294E"
+        android:title="@string/open_library"
+        app:titleTextColor="#FFFFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:titleCentered="true" />
 
     <!-- NavHostFragment – ide kerülnek a Fragmentek -->
     <androidx.fragment.app.FragmentContainerView

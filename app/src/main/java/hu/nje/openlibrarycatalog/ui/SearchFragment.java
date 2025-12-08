@@ -1,5 +1,6 @@
 package hu.nje.openlibrarycatalog.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +12,12 @@ import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
+import hu.nje.openlibrarycatalog.BookDetailActivity;
 import hu.nje.openlibrarycatalog.FavoritesStorage;
 import hu.nje.openlibrarycatalog.databinding.FragmentSearchBinding;
-import hu.nje.openlibrarycatalog.ui.Doc;
-import hu.nje.openlibrarycatalog.ui.RetrofitClient;
-import hu.nje.openlibrarycatalog.ui.SearchResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -27,6 +26,7 @@ public class SearchFragment extends Fragment {
 
     private FragmentSearchBinding binding;
     private BookAdapter adapter;
+    private FavoritesStorage favoritesStorage;
 
     @Nullable
     @Override
@@ -41,41 +41,38 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        FavoritesStorage favoritesStorage = new FavoritesStorage(requireContext());
-        adapter = new BookAdapter(favoritesStorage);
 
+        // 🔹 Kedvencek tároló + adapter
         favoritesStorage = new FavoritesStorage(requireContext());
         adapter = new BookAdapter(favoritesStorage);
 
+        // 🔹 RecyclerView beállítása
         binding.recyclerViewBooks.setLayoutManager(
-                new LinearLayoutManager(getContext())
+                new LinearLayoutManager(requireContext())
         );
         binding.recyclerViewBooks.setAdapter(adapter);
 
-        adapter = new BookAdapter(favoritesStorage);
+        // 🔹 Kattintás: részletes nézet indítása
+        adapter.setOnItemClickListener(item -> {
+            Intent intent = new Intent(requireContext(), BookDetailActivity.class);
+            intent.putExtra("title", item.getTitle());
+            intent.putExtra("author", item.getAuthor());
+            intent.putExtra("year", item.getYear());
+            intent.putExtra("coverUrl", item.getCoverUrl());
+            intent.putExtra("workId", item.getWorkId());  // 🔥 EZ KELL A DESCRIPTION-HÖZ!
+            startActivity(intent);
+        });
 
-
-        binding.recyclerViewBooks.setLayoutManager(
-                new LinearLayoutManager(getContext())
-        );
-        binding.recyclerViewBooks.setAdapter(adapter);
-        // RecyclerView beállítása
-        //adapter = new BookAdapter();
-        binding.recyclerViewBooks.setLayoutManager(
-                new LinearLayoutManager(getContext())
-        );
-        binding.recyclerViewBooks.setAdapter(adapter);
 
         // Üres állapot
         binding.textEmptyState.setText("Kezdj el keresni az Open Library-ben!");
         binding.textEmptyState.setVisibility(View.VISIBLE);
 
-        // SearchView eseménykezelő
+        // 🔹 SearchView eseménykezelő
         binding.searchViewBooks.setOnQueryTextListener(
                 new SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-
                         binding.searchViewBooks.clearFocus();
                         if (query != null && !query.trim().isEmpty()) {
                             searchBooks(query.trim());
@@ -89,31 +86,31 @@ public class SearchFragment extends Fragment {
                     }
                 });
     }
-    // Keresés
+
+    //Keresés
     public void searchBooks(String query) {
-        // Keresés folyamatban jelzése
         binding.textEmptyState.setText("Keresés folyamatban...");
         binding.textEmptyState.setVisibility(View.VISIBLE);
 
-        // Retrofit hívás
         RetrofitClient.getApi().SearchBooks(query).enqueue(new Callback<SearchResponse>() {
             @Override
-            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+            public void onResponse(Call<SearchResponse> call,
+                                   Response<SearchResponse> response) {
 
-                if (!isAdded()) {
-                    return;
-                }
+                if (!isAdded()) return;
 
-                if (response.isSuccessful() && response.body() != null && response.body().docs != null) {
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().docs != null) {
+
                     List<BookItem> resultList = new ArrayList<>();
+
                     for (Doc doc : response.body().docs) {
 
                         // Cím
-                        String title = doc.title != null
-                                ? doc.title
-                                : "Cím nélkül";
+                        String title = (doc.title != null) ? doc.title : "Cím nélkül";
 
-                        // Szerző (ha több van, az elsőt vesszük)
+                        // Szerző
                         String author = "Ismeretlen szerző";
                         if (doc.authorName != null && !doc.authorName.isEmpty()) {
                             author = doc.authorName.get(0);
@@ -132,8 +129,9 @@ public class SearchFragment extends Fragment {
                                     + doc.coverId + "-M.jpg";
                         }
 
+                        //workId: doc.key (pl. "/works/OL45883W")
                         resultList.add(
-                                new BookItem(title, author, year, coverUrl)
+                                new BookItem(title, author, year, coverUrl, doc.key)
                         );
                     }
 
@@ -145,13 +143,12 @@ public class SearchFragment extends Fragment {
                         binding.textEmptyState.setText("Nincs találat.");
                         binding.textEmptyState.setVisibility(View.VISIBLE);
                     }
+
                 } else {
-                    // Sikertelen válasz vagy üres
-                    adapter.setItems(new ArrayList<>());;
-                    binding.textEmptyState.setText("Nem sikerült beolvasni az adatoakt");
+                    adapter.setItems(new ArrayList<>());
+                    binding.textEmptyState.setText("Nem sikerült beolvasni az adatokat.");
                     binding.textEmptyState.setVisibility(View.VISIBLE);
                 }
-
             }
 
             @Override
@@ -165,11 +162,9 @@ public class SearchFragment extends Fragment {
         });
     }
 
-    // Binding nullázása
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
-
 }

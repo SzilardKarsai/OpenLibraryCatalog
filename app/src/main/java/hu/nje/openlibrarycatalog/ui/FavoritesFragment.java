@@ -41,36 +41,31 @@ public class FavoritesFragment extends Fragment {
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Tároló inicializálása
         favoritesStorage = new FavoritesStorage(requireContext());
 
-        // RecyclerView
         RecyclerView recycler = view.findViewById(R.id.recyclerFavorites);
         recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        // Adapter
         adapter = new BookAdapter(favoritesStorage);
         recycler.setAdapter(adapter);
 
-        // Üres állapot szöveg
         View emptyText = view.findViewById(R.id.textFavoritesEmpty);
 
-        // Részletes nézet indítása elemkattintásra
+        // részletes nézet indítása kedvencekből is
         adapter.setOnItemClickListener(item -> {
             Intent intent = new Intent(requireContext(), BookDetailActivity.class);
             intent.putExtra("title", item.getTitle());
             intent.putExtra("author", item.getAuthor());
             intent.putExtra("year", item.getYear());
             intent.putExtra("coverUrl", item.getCoverUrl());
+            intent.putExtra("workId", item.getWorkId());
             startActivity(intent);
         });
 
-        // Kedvencek betöltése
         loadFavorites(emptyText);
     }
 
     private void loadFavorites(View emptyText) {
-        // 1) Kedvenc ID-k begyűjtése
         Set<String> favoriteIds = favoritesStorage.getAllFavorites();
 
         if (favoriteIds.isEmpty()) {
@@ -81,21 +76,22 @@ public class FavoritesFragment extends Fragment {
 
         emptyText.setVisibility(View.GONE);
 
-        // 2) BookItem lista építése a mentett ID-kból
         List<BookItem> favoriteItems = new ArrayList<>();
 
         for (String id : favoriteIds) {
-            // bookId = title|author|year|coverUrl
-            String[] parts = id.split("\\|", 4);
 
-            if (parts.length < 3) continue;
+            // id = title|author|year|coverUrl|workId
+            String[] parts = id.split("\\|", 5);
+
+            if (parts.length < 4) continue; // nagyon régi, sérült adat
 
             String title  = parts[0];
             String author = parts[1];
             String year   = parts[2];
-            String cover  = (parts.length == 4 && !parts[3].isEmpty()) ? parts[3] : null;
+            String cover  = parts[3];
+            String workId = (parts.length == 5 && !parts[4].isEmpty()) ? parts[4] : null;
 
-            BookItem item = new BookItem(title, author, year, cover);
+            BookItem item = new BookItem(title, author, year, cover, workId);
             item.setFavorite(true);
             favoriteItems.add(item);
         }

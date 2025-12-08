@@ -20,7 +20,7 @@ public class FavoritesStorage {
 
     private Set<String> getFavoriteSetInternal() {
         Set<String> stored = prefs.getStringSet(KEY_SET, Collections.emptySet());
-        return new HashSet<>(stored); // mindig másolatot adunk vissza
+        return new HashSet<>(stored);
     }
 
     public boolean isFavorite(String id) {

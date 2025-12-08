@@ -6,28 +6,30 @@ public class BookItem {
     private String year;
     private String coverUrl;
 
-    private int key;
-    //bool változó
+
+    private String workId;
     private boolean isFavorite = false;
-    public BookItem(String title, String author, String year, String coverUrl) {
+
+    public BookItem(String title, String author, String year, String coverUrl, String workId) {
         this.title = title;
         this.author = author;
         this.year = year;
         this.coverUrl = coverUrl;
-    }
-    public int getId() {
-        return key; // vagy amiben az OpenLibrary ID van
-        // vagy vészmegoldásként: return title + "|" + author;
+        this.workId = workId;
     }
 
+    public String getWorkId() {
+        return workId;
+    }
 
-    public boolean isFavorite(){
+    public boolean isFavorite() {
         return isFavorite;
     }
 
-    public void setFavorite(boolean favorite){
+    public void setFavorite(boolean favorite) {
         isFavorite = favorite;
     }
+
     public String getTitle() {
         return title;
     }

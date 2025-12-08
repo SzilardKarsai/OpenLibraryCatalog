@@ -26,7 +26,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     private final List<BookItem> items = new ArrayList<>();
     private final FavoritesStorage favoritesStorage;
 
-    // A részletes nézethez szükséges kattintás-listener
     public interface OnItemClickListener {
         void onItemClick(BookItem item);
     }
@@ -37,12 +36,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         this.clickListener = listener;
     }
 
-    // konstruktor
     public BookAdapter(FavoritesStorage favoritesStorage) {
         this.favoritesStorage = favoritesStorage;
     }
 
-    // Lista frissítése
     public void setItems(List<BookItem> newItems) {
         items.clear();
         if (newItems != null) {
@@ -64,12 +61,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         BookItem item = items.get(position);
 
-        // Alap adatok kiírása
         holder.textTitle.setText(item.getTitle());
         holder.textAuthor.setText(item.getAuthor());
         holder.textYear.setText(item.getYear());
 
-        //  Borító betöltése
         if (item.getCoverUrl() != null) {
             Glide.with(holder.imageCover.getContext())
                     .load(item.getCoverUrl())
@@ -78,15 +73,20 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             holder.imageCover.setImageResource(R.drawable.ic_launcher_background);
         }
 
-        // Egyedi azonosító a könyvnek (kedvencekhez)
-        String safeCover = item.getCoverUrl() == null ? "" : item.getCoverUrl();
-        String bookId = item.getTitle() + "|" + item.getAuthor() + "|" + item.getYear() + "|" + safeCover;
+        // bookId: title|author|year|coverUrl|workId
+        String safeCover  = item.getCoverUrl() == null ? "" : item.getCoverUrl();
+        String safeWorkId = item.getWorkId()   == null ? "" : item.getWorkId();
 
-        // Kedvencek tárolóból beolvassuk, hogy ez kedvenc-e
+        String bookId =
+                item.getTitle() + "|" +
+                        item.getAuthor() + "|" +
+                        item.getYear()   + "|" +
+                        safeCover        + "|" +
+                        safeWorkId;
+
         boolean isFav = favoritesStorage.isFavorite(bookId);
         item.setFavorite(isFav);
 
-        //Ikonok megjelenítése a kedvenc státusz alapján
         if (item.isFavorite()) {
             holder.favoriteIcon.setVisibility(INVISIBLE);
             holder.favoriteIconOn.setVisibility(VISIBLE);
@@ -95,7 +95,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             holder.favoriteIcon.setVisibility(VISIBLE);
         }
 
-        // Kattintás a kedvencre
         View.OnClickListener favClickListener = v -> {
             boolean newState = !item.isFavorite();
             item.setFavorite(newState);
@@ -108,14 +107,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 holder.favoriteIcon.setVisibility(VISIBLE);
             }
 
-            // Mentés SharedPreferences-be
             favoritesStorage.setFavorite(bookId, newState);
         };
 
         holder.favoriteIcon.setOnClickListener(favClickListener);
         holder.favoriteIconOn.setOnClickListener(favClickListener);
 
-        // A teljes sor kattintása át dob a részletes nézetre
         holder.itemView.setOnClickListener(v -> {
             if (clickListener != null) {
                 clickListener.onItemClick(item);
@@ -128,11 +125,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         return items.size();
     }
 
-    // A ViewHolder cache-eli a sor elemeit (performance miatt)
     static class BookViewHolder extends RecyclerView.ViewHolder {
 
-        ImageButton favoriteIcon;      // üres csillag
-        ImageButton favoriteIconOn;    // teli csillag
+        ImageButton favoriteIcon;
+        ImageButton favoriteIconOn;
         ImageView imageCover;
         TextView textTitle;
         TextView textAuthor;

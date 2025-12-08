@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.bumptech.glide.Glide;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,14 +44,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.textAuthor.setText(item.getAuthor());
         holder.textYear.setText(item.getYear());
 
-        // Később: itt tudjuk majd betölteni a borítót Glide-dal, ha lesz coverUrl
-        // if (item.getCoverUrl() != null) {
-        //     Glide.with(holder.imageCover.getContext())
-        //          .load(item.getCoverUrl())
-        //          .into(holder.imageCover);
-        // } else {
-        //     holder.imageCover.setImageResource(R.drawable.ic_book_placeholder);
-        // }
+         if (item.getCoverUrl() != null) {
+             Glide.with(holder.imageCover.getContext())
+                  .load(item.getCoverUrl())
+                 .into(holder.imageCover);
+         } else {
+             holder.imageCover.setImageResource(R.drawable.ic_launcher_background);
+         }
     }
 
     @Override

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.List;
 import java.util.ArrayList;
 
+import hu.nje.openlibrarycatalog.FavoritesStorage;
 import hu.nje.openlibrarycatalog.databinding.FragmentSearchBinding;
 import hu.nje.openlibrarycatalog.ui.Doc;
 import hu.nje.openlibrarycatalog.ui.RetrofitClient;
@@ -40,9 +41,26 @@ public class SearchFragment extends Fragment {
     public void onViewCreated(@NonNull View view,
                               @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        FavoritesStorage favoritesStorage = new FavoritesStorage(requireContext());
+        adapter = new BookAdapter(favoritesStorage);
 
+        favoritesStorage = new FavoritesStorage(requireContext());
+        adapter = new BookAdapter(favoritesStorage);
+
+        binding.recyclerViewBooks.setLayoutManager(
+                new LinearLayoutManager(getContext())
+        );
+        binding.recyclerViewBooks.setAdapter(adapter);
+
+        adapter = new BookAdapter(favoritesStorage);
+
+
+        binding.recyclerViewBooks.setLayoutManager(
+                new LinearLayoutManager(getContext())
+        );
+        binding.recyclerViewBooks.setAdapter(adapter);
         // RecyclerView beállítása
-        adapter = new BookAdapter();
+        //adapter = new BookAdapter();
         binding.recyclerViewBooks.setLayoutManager(
                 new LinearLayoutManager(getContext())
         );

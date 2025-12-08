@@ -6,9 +6,26 @@
     tools:context=".ui.FavoritesFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textFavoritesEmpty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nincs kedvenc könyv."
+            android:gravity="center"
+            android:padding="16dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerFavorites"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
 
 </FrameLayout>

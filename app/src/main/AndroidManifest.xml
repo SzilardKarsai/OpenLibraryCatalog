@@ -13,15 +13,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.OpenLibraryCatalog"
         android:usesCleartextTraffic="true">
+
+        <!-- Ez az indító activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+
+        <!-- Ez csak egy sima activity, amit te indítasz -->
+        <activity
+            android:name=".BookDetailActivity"
+            android:exported="false" />
+
     </application>
+
+
 
 </manifest>

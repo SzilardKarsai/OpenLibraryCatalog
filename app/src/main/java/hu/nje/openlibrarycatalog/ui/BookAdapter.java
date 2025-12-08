@@ -26,11 +26,23 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     private final List<BookItem> items = new ArrayList<>();
     private final FavoritesStorage favoritesStorage;
 
-    // 🔹 KÖTELEZŐ: kívülről kapja a FavoritesStorage-ot
+    // A részletes nézethez szükséges kattintás-listener
+    public interface OnItemClickListener {
+        void onItemClick(BookItem item);
+    }
+
+    private OnItemClickListener clickListener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.clickListener = listener;
+    }
+
+    // konstruktor
     public BookAdapter(FavoritesStorage favoritesStorage) {
         this.favoritesStorage = favoritesStorage;
     }
 
+    // Lista frissítése
     public void setItems(List<BookItem> newItems) {
         items.clear();
         if (newItems != null) {
@@ -52,10 +64,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         BookItem item = items.get(position);
 
+        // Alap adatok kiírása
         holder.textTitle.setText(item.getTitle());
         holder.textAuthor.setText(item.getAuthor());
         holder.textYear.setText(item.getYear());
 
+        //  Borító betöltése
         if (item.getCoverUrl() != null) {
             Glide.with(holder.imageCover.getContext())
                     .load(item.getCoverUrl())
@@ -64,15 +78,15 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             holder.imageCover.setImageResource(R.drawable.ic_launcher_background);
         }
 
-        // 🔑 bookId: title|author|year|coverUrl  (cover is kell a favoriteshez)
+        // Egyedi azonosító a könyvnek (kedvencekhez)
         String safeCover = item.getCoverUrl() == null ? "" : item.getCoverUrl();
         String bookId = item.getTitle() + "|" + item.getAuthor() + "|" + item.getYear() + "|" + safeCover;
 
-        // 📥 betöltjük a kedvenc állapotot a tárolóból
+        // Kedvencek tárolóból beolvassuk, hogy ez kedvenc-e
         boolean isFav = favoritesStorage.isFavorite(bookId);
         item.setFavorite(isFav);
 
-        // ⭐ IKON ALAPÁLLAPOT
+        //Ikonok megjelenítése a kedvenc státusz alapján
         if (item.isFavorite()) {
             holder.favoriteIcon.setVisibility(INVISIBLE);
             holder.favoriteIconOn.setVisibility(VISIBLE);
@@ -81,7 +95,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             holder.favoriteIcon.setVisibility(VISIBLE);
         }
 
-        // ⭐ KATTINTÁS KEZELÉSE – mindkét ikonra
+        // Kattintás a kedvencre
         View.OnClickListener favClickListener = v -> {
             boolean newState = !item.isFavorite();
             item.setFavorite(newState);
@@ -94,12 +108,19 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
                 holder.favoriteIcon.setVisibility(VISIBLE);
             }
 
-            // 💾 itt MENTJÜK: ID-ben benne a coverUrl is
+            // Mentés SharedPreferences-be
             favoritesStorage.setFavorite(bookId, newState);
         };
 
         holder.favoriteIcon.setOnClickListener(favClickListener);
         holder.favoriteIconOn.setOnClickListener(favClickListener);
+
+        // A teljes sor kattintása át dob a részletes nézetre
+        holder.itemView.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onItemClick(item);
+            }
+        });
     }
 
     @Override
@@ -107,10 +128,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         return items.size();
     }
 
+    // A ViewHolder cache-eli a sor elemeit (performance miatt)
     static class BookViewHolder extends RecyclerView.ViewHolder {
 
-        ImageButton favoriteIcon;      // "üres" csillag
-        ImageButton favoriteIconOn;    // "teli" csillag
+        ImageButton favoriteIcon;      // üres csillag
+        ImageButton favoriteIconOn;    // teli csillag
         ImageView imageCover;
         TextView textTitle;
         TextView textAuthor;
@@ -118,12 +140,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageCover      = itemView.findViewById(R.id.imageCover);
-            textTitle       = itemView.findViewById(R.id.textTitle);
-            textAuthor      = itemView.findViewById(R.id.textAuthor);
-            textYear        = itemView.findViewById(R.id.textYear);
-            favoriteIcon    = itemView.findViewById(R.id.buttonFavorite2);
-            favoriteIconOn  = itemView.findViewById(R.id.buttonFavoriteOn);
+
+            imageCover     = itemView.findViewById(R.id.imageCover);
+            textTitle      = itemView.findViewById(R.id.textTitle);
+            textAuthor     = itemView.findViewById(R.id.textAuthor);
+            textYear       = itemView.findViewById(R.id.textYear);
+            favoriteIcon   = itemView.findViewById(R.id.buttonFavorite2);
+            favoriteIconOn = itemView.findViewById(R.id.buttonFavoriteOn);
         }
     }
 }

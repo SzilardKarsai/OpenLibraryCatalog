@@ -1,5 +1,6 @@
 package hu.nje.openlibrarycatalog.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import hu.nje.openlibrarycatalog.BookDetailActivity;
 import hu.nje.openlibrarycatalog.FavoritesStorage;
 import hu.nje.openlibrarycatalog.R;
 
@@ -27,7 +30,8 @@ public class FavoritesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
@@ -40,24 +44,33 @@ public class FavoritesFragment extends Fragment {
         // Tároló inicializálása
         favoritesStorage = new FavoritesStorage(requireContext());
 
+        // RecyclerView
+        RecyclerView recycler = view.findViewById(R.id.recyclerFavorites);
+        recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
+
         // Adapter
         adapter = new BookAdapter(favoritesStorage);
-
-        // RecyclerView
-        androidx.recyclerview.widget.RecyclerView recycler =
-                view.findViewById(R.id.recyclerFavorites);
-
-        recycler.setLayoutManager(new LinearLayoutManager(requireContext()));
         recycler.setAdapter(adapter);
 
-        // Üres állapot
+        // Üres állapot szöveg
         View emptyText = view.findViewById(R.id.textFavoritesEmpty);
 
-        // 🔥 Kedvencek betöltése
+        // Részletes nézet indítása elemkattintásra
+        adapter.setOnItemClickListener(item -> {
+            Intent intent = new Intent(requireContext(), BookDetailActivity.class);
+            intent.putExtra("title", item.getTitle());
+            intent.putExtra("author", item.getAuthor());
+            intent.putExtra("year", item.getYear());
+            intent.putExtra("coverUrl", item.getCoverUrl());
+            startActivity(intent);
+        });
+
+        // Kedvencek betöltése
         loadFavorites(emptyText);
     }
 
     private void loadFavorites(View emptyText) {
+        // 1) Kedvenc ID-k begyűjtése
         Set<String> favoriteIds = favoritesStorage.getAllFavorites();
 
         if (favoriteIds.isEmpty()) {
@@ -68,6 +81,7 @@ public class FavoritesFragment extends Fragment {
 
         emptyText.setVisibility(View.GONE);
 
+        // 2) BookItem lista építése a mentett ID-kból
         List<BookItem> favoriteItems = new ArrayList<>();
 
         for (String id : favoriteIds) {
@@ -79,7 +93,7 @@ public class FavoritesFragment extends Fragment {
             String title  = parts[0];
             String author = parts[1];
             String year   = parts[2];
-            String cover  = parts.length == 4 && !parts[3].isEmpty() ? parts[3] : null;
+            String cover  = (parts.length == 4 && !parts[3].isEmpty()) ? parts[3] : null;
 
             BookItem item = new BookItem(title, author, year, cover);
             item.setFavorite(true);
@@ -88,5 +102,4 @@ public class FavoritesFragment extends Fragment {
 
         adapter.setItems(favoriteItems);
     }
-
 }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Borító nagyban -->
+        <ImageView
+            android:id="@+id/detailImageCover"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background" />
+
+        <!-- Cím -->
+        <TextView
+            android:id="@+id/detailLabelTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cím:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="16dp" />
+
+        <TextView
+            android:id="@+id/detailTextTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp" />
+
+        <!-- Szerző -->
+        <TextView
+            android:id="@+id/detailLabelAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Szerző:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/detailTextAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+
+        <!-- Megjelenés éve -->
+        <TextView
+            android:id="@+id/detailLabelYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Megjelenés éve:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/detailTextYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+
+        <!-- Kedvenc státusz -->
+        <TextView
+            android:id="@+id/detailLabelFavorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Kedvencek között:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/detailTextFavorite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp" />
+
+        <!-- Borító URL -->
+        <TextView
+            android:id="@+id/detailLabelCoverUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Borító URL:"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp" />
+
+        <TextView
+            android:id="@+id/detailTextCoverUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</ScrollView>

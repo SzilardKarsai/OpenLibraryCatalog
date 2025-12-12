@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import hu.nje.openlibrarycatalog.BookDetailActivity;
+import hu.nje.openlibrarycatalog.BookDetail;
 import hu.nje.openlibrarycatalog.FavoritesStorage;
 import hu.nje.openlibrarycatalog.R;
 
@@ -55,7 +55,7 @@ public class FavoritesFragment extends Fragment {
 
         // részletes nézet indítása kedvencekből is
         adapter.setOnItemClickListener(item -> {
-            Intent intent = new Intent(requireContext(), BookDetailActivity.class);
+            Intent intent = new Intent(requireContext(), BookDetail.class);
             intent.putExtra("title", item.getTitle());
             intent.putExtra("author", item.getAuthor());
             intent.putExtra("year", item.getYear());

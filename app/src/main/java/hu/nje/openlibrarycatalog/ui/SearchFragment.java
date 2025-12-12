@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.nje.openlibrarycatalog.BookDetailActivity;
+import hu.nje.openlibrarycatalog.BookDetail;
 import hu.nje.openlibrarycatalog.FavoritesStorage;
 import hu.nje.openlibrarycatalog.databinding.FragmentSearchBinding;
 import retrofit2.Call;
@@ -54,7 +54,7 @@ public class SearchFragment extends Fragment {
 
         // 🔹 Kattintás: részletes nézet indítása
         adapter.setOnItemClickListener(item -> {
-            Intent intent = new Intent(requireContext(), BookDetailActivity.class);
+            Intent intent = new Intent(requireContext(), BookDetail.class);
             intent.putExtra("title", item.getTitle());
             intent.putExtra("author", item.getAuthor());
             intent.putExtra("year", item.getYear());

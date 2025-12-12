@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class BookDetailActivity extends AppCompatActivity {
+public class BookDetail extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,6 +66,7 @@ public class BookDetailActivity extends AppCompatActivity {
             textDescription.setText("Ehhez a könyvhöz nem található leírás (nincs workId).");
         }
     }
+
 
 
     private void loadDescription(String workId,

@@ -12,24 +12,24 @@ amely biztosítja az egyszerű és átlátható használatot.
 
 ---
 
-##Felhasználói funkciók
+## Felhasználói funkciók
 
-###Kezdőlap
+### Kezdőlap
 - Rövid bemutató szöveg az alkalmazás működéséről
 - Illusztratív grafika
 - Navigáció az alsó menüsáv segítségével
 
-###Könyvkeresés
+### Könyvkeresés
 - Könyvek keresése cím vagy szerző alapján
 - Találatok listázása borítóképpel, címmel, szerzővel és megjelenési évvel
 - Keresési eredmények valós időben az Open Library API segítségével
 
-###Kedvencek kezelése
+### Kedvencek kezelése
 - Könyvek hozzáadása és eltávolítása a kedvencek közül
 - Kedvencek külön listában történő megjelenítése
 - Kedvencek automatikus frissítése a nézet újratöltése nélkül
 
-###Részletes könyvnézet
+### Részletes könyvnézet
 - Könyv részletes adatainak megjelenítése:
   - cím
   - szerző
@@ -40,7 +40,7 @@ amely biztosítja az egyszerű és átlátható használatot.
 
 ---
 
-##Navigáció
+## Navigáció
 - Alsó navigációs sáv:
   - Kezdőlap
   - Keresés
@@ -49,7 +49,7 @@ amely biztosítja az egyszerű és átlátható használatot.
 
 ---
 
-##Adatforrás
+## Adatforrás
 Az alkalmazás az **Open Library** nyilvános REST API-ját használja:
 - könyvkereséshez
 - borítóképek letöltéséhez
@@ -57,7 +57,7 @@ Az alkalmazás az **Open Library** nyilvános REST API-ját használja:
 
 ---
 
-##Technológiai áttekintés
+## Technológiai áttekintés
 - Android (Java)
 - Fragment alapú architektúra
 - RecyclerView

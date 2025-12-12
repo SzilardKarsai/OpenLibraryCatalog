@@ -1,5 +1,5 @@
-#OpenLibraryCatalog
-##Az alkalmazás célja
+# OpenLibraryCatalog
+## Az alkalmazás célja
 
 Az **OpenLibraryCatalog** egy Android alapú mobilalkalmazás, amely lehetővé teszi
 könyvek keresését az **Open Library** nyilvános adatbázisában.  

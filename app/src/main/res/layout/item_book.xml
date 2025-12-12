@@ -1,79 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_marginHorizontal="8dp"
+    android:layout_marginVertical="2dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="true">
 
-    <ImageButton
-        android:id="@+id/buttonFavorite2"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/empty"
-        android:src="@android:drawable/btn_star"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/imageCover"
-        android:layout_width="70dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:contentDescription="@string/empty"
-        android:background="@android:color/darker_gray"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <!-- Cím -->
-    <TextView
-        android:id="@+id/textTitle"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/placeholder_title"
-        android:textStyle="bold"
-        android:maxLines="2"
-        android:ellipsize="end"
-        app:layout_constraintTop_toTopOf="@+id/imageCover"
-        app:layout_constraintStart_toEndOf="@id/imageCover"
-        app:layout_constraintEnd_toStartOf="@id/buttonFavoriteOn"
-        android:layout_marginStart="8dp" />
+        android:padding="4dp">
 
-    <!-- Szerző -->
-    <TextView
-        android:id="@+id/textAuthor"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/placeholder_author"
-        android:textSize="13sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintTop_toBottomOf="@id/textTitle"
-        app:layout_constraintStart_toStartOf="@id/textTitle"
-        app:layout_constraintEnd_toEndOf="@id/textTitle" />
+        <ImageView
+            android:id="@+id/imageCover"
+            android:layout_width="76dp"
+            android:layout_height="110dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/darker_gray"
+            android:contentDescription="@string/empty"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Év -->
-    <TextView
-        android:id="@+id/textYear"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/placeholder_year"
-        android:textSize="12sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintBottom_toBottomOf="@id/imageCover"
-        app:layout_constraintStart_toStartOf="@id/textTitle" />
+        <TextView
+            android:id="@+id/textTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/placeholder_title"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/buttonFavoriteOn"
+            app:layout_constraintStart_toEndOf="@id/imageCover"
+            app:layout_constraintTop_toTopOf="@id/imageCover" />
 
-    <!-- Kedvenc ikon (egyelőre csak dísz) -->
-    <ImageButton
-        android:id="@+id/buttonFavoriteOn"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/empty"
-        android:src="@android:drawable/btn_star_big_on"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
+        <TextView
+            android:id="@+id/textAuthor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:text="@string/placeholder_author"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="@id/textTitle"
+            app:layout_constraintStart_toStartOf="@id/textTitle"
+            app:layout_constraintTop_toBottomOf="@id/textTitle" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/placeholder_year"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@id/imageCover"
+            app:layout_constraintStart_toStartOf="@id/textTitle" />
+
+        <ImageButton
+            android:id="@+id/buttonFavorite2"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/empty"
+            android:src="@android:drawable/btn_star"
+            app:layout_constraintBottom_toBottomOf="@id/imageCover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imageCover"
+            app:layout_constraintVertical_bias="0.15" />
+
+        <ImageButton
+            android:id="@+id/buttonFavoriteOn"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/empty"
+            android:src="@android:drawable/btn_star_big_on"
+            app:layout_constraintBottom_toBottomOf="@id/imageCover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/imageCover"
+            app:layout_constraintVertical_bias="0.15"
+            tools:visibility="invisible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

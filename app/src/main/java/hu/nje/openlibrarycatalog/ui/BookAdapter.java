@@ -36,6 +36,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         this.clickListener = listener;
     }
 
+    public interface OnFavoritesChangedListener {
+        void onChanged();
+    }
+    private OnFavoritesChangedListener favoritesChangedListener;
+    public void setOnFavoritesChangedListener(OnFavoritesChangedListener listener) {
+        this.favoritesChangedListener = listener;
+    }
+
     public BookAdapter(FavoritesStorage favoritesStorage) {
         this.favoritesStorage = favoritesStorage;
     }
@@ -96,6 +104,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         }
 
         View.OnClickListener favClickListener = v -> {
+            boolean wasFav = item.isFavorite();
             boolean newState = !item.isFavorite();
             item.setFavorite(newState);
 
@@ -108,6 +117,11 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             }
 
             favoritesStorage.setFavorite(bookId, newState);
+
+            if (wasFav && !newState && favoritesChangedListener != null) {
+                favoritesChangedListener.onChanged();
+            }
+
         };
 
         holder.favoriteIcon.setOnClickListener(favClickListener);

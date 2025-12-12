@@ -24,6 +24,7 @@ public class FavoritesFragment extends Fragment {
 
     private BookAdapter adapter;
     private FavoritesStorage favoritesStorage;
+    private View emptyText;
 
     public FavoritesFragment() {
         // Required empty public constructor
@@ -49,7 +50,8 @@ public class FavoritesFragment extends Fragment {
         adapter = new BookAdapter(favoritesStorage);
         recycler.setAdapter(adapter);
 
-        View emptyText = view.findViewById(R.id.textFavoritesEmpty);
+        emptyText = view.findViewById(R.id.textFavoritesEmpty);
+        adapter.setOnFavoritesChangedListener(() -> loadFavorites());
 
         // részletes nézet indítása kedvencekből is
         adapter.setOnItemClickListener(item -> {
@@ -62,10 +64,10 @@ public class FavoritesFragment extends Fragment {
             startActivity(intent);
         });
 
-        loadFavorites(emptyText);
+        loadFavorites();
     }
 
-    private void loadFavorites(View emptyText) {
+    private void loadFavorites() {
         Set<String> favoriteIds = favoritesStorage.getAllFavorites();
 
         if (favoriteIds.isEmpty()) {

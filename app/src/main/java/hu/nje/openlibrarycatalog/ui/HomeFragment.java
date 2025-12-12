@@ -28,10 +28,6 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        binding.btnStartSearch.setOnClickListener(v ->
-            Navigation.findNavController(v).navigate(R.id.searchFragment)
-        );
-
         return binding.getRoot();
     }
 

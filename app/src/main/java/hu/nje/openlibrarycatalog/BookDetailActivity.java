@@ -21,7 +21,7 @@ public class BookDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_detail);
+        setContentView(R.layout.fragment_book_detail);
 
         ImageView imageCover      = findViewById(R.id.detailImageCover);
         TextView textTitle        = findViewById(R.id.detailTextTitle);

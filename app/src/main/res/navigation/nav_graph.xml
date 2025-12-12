@@ -22,4 +22,10 @@
         android:name="hu.nje.openlibrarycatalog.ui.FavoritesFragment"
         android:label="Kedvencek"
         tools:layout="@layout/fragment_favorites" />
+
+    <fragment
+        android:id="@+id/bookDetailFragment"
+        android:name="hu.nje.openlibrarycatalog.ui.BookDetailFragment"
+        android:label="Részletek"
+        tools:layout="@layout/fragment_book_detail" />
 </navigation>

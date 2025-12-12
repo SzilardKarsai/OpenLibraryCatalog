@@ -1,6 +1,5 @@
 package hu.nje.openlibrarycatalog.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +10,25 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import hu.nje.openlibrarycatalog.BookDetail;
 import hu.nje.openlibrarycatalog.FavoritesStorage;
 import hu.nje.openlibrarycatalog.databinding.FragmentSearchBinding;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import hu.nje.openlibrarycatalog.R;
 
 public class SearchFragment extends Fragment {
 
     private FragmentSearchBinding binding;
     private BookAdapter adapter;
     private FavoritesStorage favoritesStorage;
+    private String lastQuery = null;
+    private boolean isLoading = false;
 
     @Nullable
     @Override
@@ -54,13 +56,15 @@ public class SearchFragment extends Fragment {
 
         // 🔹 Kattintás: részletes nézet indítása
         adapter.setOnItemClickListener(item -> {
-            Intent intent = new Intent(requireContext(), BookDetail.class);
-            intent.putExtra("title", item.getTitle());
-            intent.putExtra("author", item.getAuthor());
-            intent.putExtra("year", item.getYear());
-            intent.putExtra("coverUrl", item.getCoverUrl());
-            intent.putExtra("workId", item.getWorkId());  // 🔥 EZ KELL A DESCRIPTION-HÖZ!
-            startActivity(intent);
+            Bundle args = new Bundle();
+            args.putString("title", item.getTitle());
+            args.putString("author", item.getAuthor());
+            args.putString("year", item.getYear());
+            args.putString("coverUrl", item.getCoverUrl());
+            args.putString("workId", item.getWorkId());
+
+            Navigation.findNavController(view)
+                    .navigate(R.id.bookDetailFragment, args);
         });
 
 
@@ -75,7 +79,8 @@ public class SearchFragment extends Fragment {
                     public boolean onQueryTextSubmit(String query) {
                         binding.searchViewBooks.clearFocus();
                         if (query != null && !query.trim().isEmpty()) {
-                            searchBooks(query.trim());
+                            lastQuery = query.trim();
+                            searchBooks(lastQuery);
                         }
                         return true;
                     }
@@ -87,8 +92,37 @@ public class SearchFragment extends Fragment {
                 });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (binding == null) return;
+
+        String q = binding.searchViewBooks.getQuery() != null
+                ? binding.searchViewBooks.getQuery().toString().trim()
+                : "";
+
+        // Ha van beírt keresés (pl. "Harry Potter"), frissítsük a találatokat
+        if (!q.isEmpty()) {
+            binding.searchViewBooks.clearFocus();
+
+            // Ne indítsuk el feleslegesen duplán ugyanazt a keresést
+            if (lastQuery == null || !lastQuery.equals(q)) {
+                lastQuery = q;
+            }
+
+            // csak akkor indítsuk, ha nincs épp folyamatban kérés
+            if (!isLoading) {
+                searchBooks(lastQuery);
+            }
+        }
+    }
+
     //Keresés
     public void searchBooks(String query) {
+        if (isLoading) return;
+        isLoading = true;
+
         binding.textEmptyState.setText("Keresés folyamatban...");
         binding.textEmptyState.setVisibility(View.VISIBLE);
 
@@ -96,6 +130,8 @@ public class SearchFragment extends Fragment {
             @Override
             public void onResponse(Call<SearchResponse> call,
                                    Response<SearchResponse> response) {
+
+                isLoading = false;
 
                 if (!isAdded()) return;
 
@@ -125,7 +161,7 @@ public class SearchFragment extends Fragment {
                         // Borító URL
                         String coverUrl = null;
                         if (doc.coverId != null) {
-                            coverUrl = "https://covers.openlibrary.org/b/id/"
+                            coverUrl = "http://covers.openlibrary.org/b/id/"
                                     + doc.coverId + "-M.jpg";
                         }
 
@@ -153,6 +189,8 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
+                isLoading = false;
+
                 if (!isAdded()) return;
 
                 adapter.setItems(new ArrayList<>());

@@ -12,7 +12,7 @@
         android:id="@+id/topAppBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#23294E"
+        android:background="#2F5D8C"
         android:title="@string/open_library"
         app:titleTextColor="#FFFFFFFF"
         app:layout_constraintEnd_toEndOf="parent"

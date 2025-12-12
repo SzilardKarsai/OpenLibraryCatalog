@@ -26,11 +26,6 @@
 
         </activity>
 
-        <!-- Ez csak egy sima activity, amit te indítasz -->
-        <activity
-            android:name=".BookDetail"
-            android:exported="false" />
-
     </application>
 
 

@@ -1,6 +1,5 @@
 package hu.nje.openlibrarycatalog.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +10,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import hu.nje.openlibrarycatalog.BookDetail;
 import hu.nje.openlibrarycatalog.FavoritesStorage;
 import hu.nje.openlibrarycatalog.R;
 
@@ -55,13 +54,16 @@ public class FavoritesFragment extends Fragment {
 
         // részletes nézet indítása kedvencekből is
         adapter.setOnItemClickListener(item -> {
-            Intent intent = new Intent(requireContext(), BookDetail.class);
-            intent.putExtra("title", item.getTitle());
-            intent.putExtra("author", item.getAuthor());
-            intent.putExtra("year", item.getYear());
-            intent.putExtra("coverUrl", item.getCoverUrl());
-            intent.putExtra("workId", item.getWorkId());
-            startActivity(intent);
+            Bundle args = new Bundle();
+            args.putString("title", item.getTitle());
+            args.putString("author", item.getAuthor());
+            args.putString("year", item.getYear());
+            args.putString("coverUrl", item.getCoverUrl());
+            args.putString("workId", item.getWorkId());
+
+            // Navigálás a BookDetailFragmentre
+            Navigation.findNavController(view)
+                    .navigate(R.id.bookDetailFragment, args);
         });
 
         loadFavorites();
